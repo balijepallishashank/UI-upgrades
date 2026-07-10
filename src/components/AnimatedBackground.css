@@ -1,0 +1,85 @@
+.animated-background {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+}
+
+.blob {
+    position: absolute;
+    border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+    filter: blur(140px);
+    opacity: 0.12; /* Enhanced opacity for liquid morph visibility in Light Mode */
+    animation: morphLiquid 22s ease-in-out infinite;
+}
+
+[data-theme='dark'] .blob {
+    filter: blur(180px);
+    opacity: 0.18; /* Enhanced opacity for liquid morph visibility in Dark Mode */
+    animation-name: morphLiquid;
+    animation-duration: 30s;
+}
+
+/* Light Mode Colors */
+.blob-1 {
+    width: 600px;
+    height: 600px;
+    background: #A3D95C; /* Soft Sage Green */
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.blob-2 {
+    width: 500px;
+    height: 500px;
+    background: #86efac; /* Mint */
+    bottom: -50px;
+    right: -50px;
+    animation-delay: -5s;
+}
+
+.blob-3 {
+    width: 400px;
+    height: 400px;
+    background: #bae6fd; /* Soft Sky Blue */
+    top: 40%;
+    left: 30%;
+    animation-delay: -10s;
+}
+
+/* Dark Mode Colors */
+[data-theme='dark'] .blob-1 {
+    background: #047857; /* Deep Emerald */
+}
+
+[data-theme='dark'] .blob-2 {
+    background: #0f766e; /* Dark Teal */
+}
+
+[data-theme='dark'] .blob-3 {
+    background: #4338ca; /* Indigo */
+}
+
+@keyframes morphLiquid {
+    0% {
+        border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+        transform: translate(0, 0) rotate(0deg) scale(1);
+    }
+    33% {
+        border-radius: 40% 60% 45% 55% / 50% 45% 55% 50%;
+        transform: translate(40px, -60px) rotate(120deg) scale(1.15);
+    }
+    66% {
+        border-radius: 60% 40% 55% 45% / 45% 55% 40% 60%;
+        transform: translate(-30px, 30px) rotate(240deg) scale(0.9);
+    }
+    100% {
+        border-radius: 50% 50% 50% 50% / 50% 50% 50% 50%;
+        transform: translate(0, 0) rotate(360deg) scale(1);
+    }
+}
