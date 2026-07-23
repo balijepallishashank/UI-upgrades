@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    GraduationCap, Users, TrendingUp, BookOpen, UserCheck, CalendarOff, AlertTriangle, 
-    FileText, User, ShieldAlert, CreditCard, Clock, Activity, MapPin, Phone, Mail, Award,
-    Check, X, FileUp, Download
+    Users, TrendingUp, UserCheck, CalendarOff, 
+    FileText, User, Clock, MapPin, Phone, Mail, Award,
+    FileUp, Download
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SegmentedControl from '../components/SegmentedControl';
@@ -189,11 +189,12 @@ const Students = () => {
                     {activeTab === 'overview' && (
                         <div>
                             {/* KPI Grid */}
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '24px' }}>
+                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '20px', marginBottom: '24px' }}>
                                 <KPICard title="Total Students" value={totalStudents} icon={Users} color="#3B82F6" />
                                 <KPICard title="Present Today" value={presentToday} icon={UserCheck} color="#22C55E" />
                                 <KPICard title="Late Arrivals" value={lateToday} icon={Clock} color="#F59E0B" />
-                                <KPICard title="On Leave" value={leaveToday} icon={CalendarOff} color="#8B5CF6" />
+                                <KPICard title="On Leave" value={leaveToday} icon={CalendarOff} color="#EF4444" />
+                                <KPICard title="Avg Attendance" value={avgAttendance} icon={TrendingUp} color="#8B5CF6" />
                             </div>
 
                             {/* Main split */}
@@ -386,7 +387,7 @@ const Students = () => {
                                                     <button className="btn-white" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => setDetailsSubTab('leave')}>
                                                         🏖️ Apply Leave
                                                     </button>
-                                                    <button className="btn-white" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => navigate('/finance', { state: { tab: 'duelist', search: selectedStudent.name } })}>
+                                                    <button className="btn-white" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => navigate('/finance', { state: { tab: 'dues', search: selectedStudent.name } })}>
                                                         💸 View Fee Details
                                                     </button>
                                                     <button className="btn-white" style={{ fontSize: '12px', padding: '6px 12px' }} onClick={() => setDetailsSubTab('documents')}>
@@ -763,17 +764,17 @@ const Students = () => {
                         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                         <motion.div initial={{ scale: 0.85, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, y: 20 }} transition={{ type: 'spring', stiffness: 280, damping: 25 }}
                             onClick={e => e.stopPropagation()}
-                            style={{ background: 'white', borderRadius: '20px', padding: '32px', maxWidth: '480px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }}>
-                            <button onClick={() => setShowIdCard(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#666' }}>✕</button>
-                            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1D1D1D', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>🪪 Student ID Card</h3>
+                            style={{ background: 'var(--card-white)', border: '1px solid var(--border-color)', borderRadius: '20px', padding: '32px', maxWidth: '480px', width: '100%', boxShadow: 'var(--glass-shadow)', position: 'relative' }}>
+                            <button onClick={() => setShowIdCard(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: 'var(--text-secondary)' }}>✕</button>
+                            <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '20px', display: 'flex', alignItems: 'center', gap: '8px' }}>🪪 Student ID Card</h3>
                             {/* ID Card Design */}
-                            <div id="id-card-print" style={{ background: 'linear-gradient(135deg, #1F5535 0%, #2d7a4f 60%, #A3D95C 100%)', borderRadius: '16px', padding: '24px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '20px' }}>
+                            <div id="id-card-print" style={{ background: 'linear-gradient(135deg, #10B981 0%, #059669 60%, #34D399 100%)', borderRadius: '16px', padding: '24px', color: 'white', position: 'relative', overflow: 'hidden', marginBottom: '20px' }}>
                                 <div style={{ position: 'absolute', top: -20, right: -20, width: '120px', height: '120px', borderRadius: '50%', background: 'rgba(255,255,255,0.08)' }} />
                                 <div style={{ position: 'absolute', bottom: -30, left: -10, width: '100px', height: '100px', borderRadius: '50%', background: 'rgba(255,255,255,0.05)' }} />
                                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '16px', position: 'relative', zIndex: 2 }}>
                                     <div>
-                                        <div style={{ fontSize: '11px', opacity: 0.75, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '2px' }}>TITUS Institute of Technology</div>
-                                        <div style={{ fontSize: '10px', opacity: 0.6 }}>2026-27 Academic Year</div>
+                                        <div style={{ fontSize: '11px', opacity: 0.85, letterSpacing: '1px', textTransform: 'uppercase', marginBottom: '2px', fontWeight: 700 }}>TITUS Institute of Technology</div>
+                                        <div style={{ fontSize: '10px', opacity: 0.7 }}>2026-27 Academic Year</div>
                                     </div>
                                     <div style={{ background: 'rgba(255,255,255,0.2)', borderRadius: '8px', padding: '4px 10px', fontSize: '11px', fontWeight: 700 }}>STUDENT</div>
                                 </div>
@@ -781,18 +782,18 @@ const Students = () => {
                                     <img src={selectedStudent.avatar} alt={selectedStudent.name} style={{ width: '72px', height: '72px', borderRadius: '50%', border: '3px solid rgba(255,255,255,0.5)', objectFit: 'cover' }} />
                                     <div>
                                         <div style={{ fontSize: '18px', fontWeight: 700 }}>{selectedStudent.name}</div>
-                                        <div style={{ fontSize: '12px', opacity: 0.8, marginTop: '2px' }}>Class: {selectedStudent.class} • Roll: {selectedStudent.roll}</div>
-                                        <div style={{ fontSize: '11px', opacity: 0.65, marginTop: '2px' }}>ID: {selectedStudent.id}</div>
+                                        <div style={{ fontSize: '12px', opacity: 0.9, marginTop: '2px' }}>Class: {selectedStudent.class} • Roll: {selectedStudent.roll}</div>
+                                        <div style={{ fontSize: '11px', opacity: 0.75, marginTop: '2px' }}>ID: {selectedStudent.id}</div>
                                     </div>
                                 </div>
-                                <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 2, fontSize: '11px', opacity: 0.75 }}>
+                                <div style={{ marginTop: '16px', paddingTop: '12px', borderTop: '1px solid rgba(255,255,255,0.2)', display: 'flex', justifyContent: 'space-between', position: 'relative', zIndex: 2, fontSize: '11px', opacity: 0.85 }}>
                                     <span>GPA: {selectedStudent.gpa}</span>
                                     <span>Valid: 2026-27</span>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} style={{ flex: 1, padding: '11px', background: '#1F5535', color: 'white', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>🖨️ Print ID Card</motion.button>
-                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowIdCard(false)} style={{ padding: '11px 20px', background: 'none', border: '1px solid #EAEAEA', borderRadius: '10px', fontSize: '14px', cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>Close</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} className="btn-primary" style={{ flex: 1, padding: '11px' }}>🖨️ Print ID Card</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowIdCard(false)} className="btn-white" style={{ padding: '11px 20px' }}>Close</motion.button>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -806,31 +807,31 @@ const Students = () => {
                         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', overflowY: 'auto' }}>
                         <motion.div initial={{ scale: 0.85, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, y: 20 }} transition={{ type: 'spring', stiffness: 280, damping: 25 }}
                             onClick={e => e.stopPropagation()}
-                            style={{ background: 'white', borderRadius: '20px', padding: '36px', maxWidth: '600px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.3)', position: 'relative' }}>
-                            <button onClick={() => setShowTc(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#666' }}>✕</button>
-                            <div style={{ textAlign: 'center', borderBottom: '2px solid #1F5535', paddingBottom: '16px', marginBottom: '24px' }}>
-                                <div style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '1px', color: '#1F5535', textTransform: 'uppercase' }}>TITUS Institute of Technology</div>
-                                <div style={{ fontSize: '11px', color: '#587290', marginTop: '2px' }}>Accredited by NAAC Grade A+ • ISO 9001:2015</div>
-                                <h2 style={{ fontSize: '22px', fontWeight: 800, color: '#1D1D1D', margin: '12px 0 0' }}>Transfer Certificate</h2>
+                            style={{ background: 'var(--card-white)', border: '1px solid var(--border-color)', borderRadius: '20px', padding: '36px', maxWidth: '600px', width: '100%', boxShadow: 'var(--glass-shadow)', position: 'relative' }}>
+                            <button onClick={() => setShowTc(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: 'var(--text-secondary)' }}>✕</button>
+                            <div style={{ textAlign: 'center', borderBottom: '2px solid var(--primary-green)', paddingBottom: '16px', marginBottom: '24px' }}>
+                                <div style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '1px', color: 'var(--primary-dark)', textTransform: 'uppercase' }}>TITUS Institute of Technology</div>
+                                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>Accredited by NAAC Grade A+ • ISO 9001:2015</div>
+                                <h2 style={{ fontSize: '22px', fontWeight: 800, color: 'var(--text-primary)', margin: '12px 0 0' }}>Transfer Certificate</h2>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
                                 {[['TC Number', `TC-2026-${selectedStudent.id.slice(-3)}`], ['Date of Issue', new Date().toLocaleDateString('en-IN')], ['Student Name', selectedStudent.name], ['Date of Birth', '01-01-2004'], ['Class / Section', selectedStudent.class], ['Roll Number', selectedStudent.roll], ['Date of Admission', '01-07-2022'], ['Date of Leaving', '30-06-2026']].map(([label, val]) => (
                                     <div key={label}>
-                                        <div style={{ fontSize: '10px', color: '#587290', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{label}</div>
-                                        <div style={{ fontSize: '14px', fontWeight: 600, color: '#1D1D1D' }}>{val}</div>
+                                        <div style={{ fontSize: '10px', color: 'var(--text-secondary)', textTransform: 'uppercase', letterSpacing: '0.5px', marginBottom: '2px' }}>{label}</div>
+                                        <div style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text-primary)' }}>{val}</div>
                                     </div>
                                 ))}
                             </div>
-                            <div style={{ background: '#f8fafc', border: '1px solid #EAEAEA', borderRadius: '10px', padding: '16px', marginBottom: '24px' }}>
-                                <p style={{ fontSize: '13px', lineHeight: '1.7', color: '#3d3d3d' }}>This is to certify that <strong>{selectedStudent.name}</strong>, bearing Roll No. <strong>{selectedStudent.roll}</strong>, was a bonafide student of this institution. The student's <strong>conduct and character were Good</strong> during the period of study. This certificate is issued upon request of the parent/guardian.</p>
+                            <div style={{ background: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '10px', padding: '16px', marginBottom: '24px' }}>
+                                <p style={{ fontSize: '13px', lineHeight: '1.7', color: 'var(--text-secondary)' }}>This is to certify that <strong style={{ color: 'var(--text-primary)' }}>{selectedStudent.name}</strong>, bearing Roll No. <strong style={{ color: 'var(--text-primary)' }}>{selectedStudent.roll}</strong>, was a bonafide student of this institution. The student's <strong style={{ color: 'var(--primary-dark)' }}>conduct and character were Good</strong> during the period of study. This certificate is issued upon request of the parent/guardian.</p>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginBottom: '24px', paddingTop: '8px' }}>
-                                <div style={{ borderTop: '1px solid #1D1D1D', paddingTop: '8px', fontSize: '12px', color: '#587290' }}>Class Teacher Signature</div>
-                                <div style={{ borderTop: '1px solid #1D1D1D', paddingTop: '8px', fontSize: '12px', color: '#587290', textAlign: 'right' }}>Principal Signature</div>
+                                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '8px', fontSize: '12px', color: 'var(--text-secondary)' }}>Class Teacher Signature</div>
+                                <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '8px', fontSize: '12px', color: 'var(--text-secondary)', textAlign: 'right' }}>Principal Signature</div>
                             </div>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} style={{ flex: 1, padding: '11px', background: '#1F5535', color: 'white', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>🖨️ Print TC</motion.button>
-                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowTc(false)} style={{ padding: '11px 20px', background: 'none', border: '1px solid #EAEAEA', borderRadius: '10px', fontSize: '14px', cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>Close</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} className="btn-primary" style={{ flex: 1, padding: '11px' }}>🖨️ Print TC</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowTc(false)} className="btn-white" style={{ padding: '11px 20px' }}>Close</motion.button>
                             </div>
                         </motion.div>
                     </motion.div>

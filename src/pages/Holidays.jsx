@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Calendar, Trash2, Plus, X } from 'lucide-react';
+import { Trash2, Plus } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { mockHolidays } from '../mockData';
 import { useToast } from '../contexts/ToastContext';

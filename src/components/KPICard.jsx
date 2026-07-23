@@ -16,7 +16,9 @@ const KPICard = ({ title, value, icon: Icon, color, subtext }) => (
         variants={itemVariants}
         className="card"
         style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}
-        whileHover={{ y: -4, scale: 1.01 }}
+        whileHover={{ y: -6, scale: 1.025, rotateX: 2, rotateY: -2 }}
+        whileTap={{ scale: 0.97 }}
+        transition={{ type: "spring", stiffness: 350, damping: 25 }}
     >
         <div style={{
             width: '44px', height: '44px', borderRadius: '10px',

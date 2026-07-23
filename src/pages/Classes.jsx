@@ -1,28 +1,22 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    School, Users, BookOpen, GraduationCap, Plus, Edit2, 
-    Trash2, TrendingUp, CheckCircle, X
+    School, Users, BookOpen, Plus, Edit2, 
+    Trash2, TrendingUp, X
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
-import SegmentedControl from '../components/SegmentedControl';
 import KPICard from '../components/KPICard';
-import Badge from '../components/Badge';
 import { useToast } from '../contexts/ToastContext';
 import { mockClasses } from '../mockData';
 
 const Classes = () => {
     const { addToast } = useToast();
-    const [activeTab, setActiveTab] = useState('directory');
     const [classes, setClasses] = useState(mockClasses);
     const [showModal, setShowModal] = useState(false);
     const [editTarget, setEditTarget] = useState(null);
     const [form, setForm] = useState({ name: '', section: 'A', stream: '', teacher: '', students: 0, performance: '80%' });
 
-    const tabs = [
-        { id: 'directory', label: 'Class Directory' },
-        { id: 'add', label: 'Add New Class' },
-    ];
+
 
     const totalStudents = classes.reduce((a, c) => a + c.students, 0);
     const avgPerformance = classes.length ? Math.round(classes.reduce((a, c) => a + parseInt(c.performance), 0) / classes.length) : 0;

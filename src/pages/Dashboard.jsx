@@ -1,18 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { 
     Users, CalendarOff, Clock, FileText, Calendar, ClipboardCheck, 
-    ArrowRight, Pin, EyeOff, Settings2, RefreshCw, Send, CheckCircle2,
+    ArrowRight, Pin, EyeOff, Settings2, RefreshCw, Send,
     DollarSign, Package, UserX, AlertTriangle
 } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer } from 'recharts';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import Drawer from '../components/Drawer';
 import AnimatedNumber from '../components/AnimatedNumber';
 import PageTransition from '../components/PageTransition';
 import { 
-    mockStudents, mockEmployees, mockInventory, 
-    mockFinanceDueList, mockFeeTransactions, mockAttendance, mockLeave,
+    mockStudents, mockInventory, 
+    mockFinanceDueList,
     mockEvents, mockBirthdays, mockTimetableData
 } from '../mockData';
 import { useToast } from '../contexts/ToastContext';
@@ -44,8 +43,9 @@ const QuickAccessBtn = ({ title, desc, icon: Icon, colorClass, onClick }) => {
         <motion.div 
             className="qa-item" 
             onClick={onClick}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={{ scale: 1.035, y: -4, rotateX: 2, rotateY: -2 }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
         >
             <div className={`qa-icon ${colorClass}`}>
                 <Icon size={20} />
@@ -565,7 +565,9 @@ const Dashboard = () => {
                             return (
                                 <motion.div key={widget.id} variants={itemVariants} className="card" style={{ padding: '24px' }}>
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                                        <h3 className="card-title" style={{ margin: 0 }}>Real-Time Activity Feed</h3>
+                                        <h3 className="card-title" style={{ margin: 0, display: 'flex', alignItems: 'center', gap: '8px' }}>
+                                            Real-Time Activity Feed <span className="pulse-dot" title="Live Stream Active" />
+                                        </h3>
                                         <button onClick={() => togglePin('activity_feed')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: widget.pinned ? 'var(--warning)' : 'var(--text-secondary)' }}>
                                             <Pin size={14} fill={widget.pinned ? "var(--warning)" : "none"} />
                                         </button>
@@ -632,7 +634,7 @@ const Dashboard = () => {
                                         </button>
                                     </div>
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                                        {mockBirthdays.map((person, idx) => (
+                                        {(todayBirthdays.length > 0 ? todayBirthdays : mockBirthdays).map((person, idx) => (
                                             <motion.div
                                                 key={person.id}
                                                 initial={{ opacity: 0, y: 8 }}

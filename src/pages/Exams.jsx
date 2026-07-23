@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    Trophy, BookOpen, Calendar, Clock, Plus, Users, 
-    CheckCircle, FileText, TrendingUp, Edit2, Trash2, AlertCircle
+    Trophy, Calendar, Plus, 
+    CheckCircle, FileText, TrendingUp
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SegmentedControl from '../components/SegmentedControl';
@@ -18,7 +18,7 @@ const Exams = () => {
     const { addToast } = useToast();
     const [activeTab, setActiveTab] = useState('overview');
     const [examsList, setExamsList] = useState(mockExams);
-    const [resultsList, setResultsList] = useState(mockExamResults);
+    const [resultsList] = useState(mockExamResults);
     const [filterClass, setFilterClass] = useState('All');
     const [filterType, setFilterType] = useState('All');
     const [showAddModal, setShowAddModal] = useState(false);
@@ -335,56 +335,56 @@ const Exams = () => {
                                 <h2 style={{ fontSize: '15px', fontWeight: 700 }}>🪪 Printable Examination Admit Card</h2>
                                 <button onClick={() => setSelectedAdmitCard(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '18px' }}>✕</button>
                             </div>
-                            <div id="admit-card-print-area" style={{ padding: '32px', background: 'white', color: '#1D1D1D', fontFamily: 'Inter, sans-serif' }}>
-                                <div style={{ border: '2px solid #1F5535', borderRadius: '12px', padding: '20px', position: 'relative' }}>
+                            <div id="admit-card-print-area" style={{ padding: '32px', background: 'var(--card-white)', color: 'var(--text-primary)', fontFamily: 'Inter, sans-serif' }}>
+                                <div style={{ border: '2px solid var(--primary-green)', borderRadius: '12px', padding: '20px', position: 'relative' }}>
                                     {/* Watermark */}
-                                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-30deg)', fontSize: '48px', fontWeight: 800, color: 'rgba(31, 85, 53, 0.05)', pointerEvents: 'none', userSelect: 'none', letterSpacing: '2px' }}>TITUS SECURE</div>
+                                    <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-30deg)', fontSize: '48px', fontWeight: 800, color: 'rgba(16, 185, 129, 0.05)', pointerEvents: 'none', userSelect: 'none', letterSpacing: '2px' }}>TITUS SECURE</div>
                                     
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid #1F5535', paddingBottom: '12px', marginBottom: '16px' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', borderBottom: '2px solid var(--primary-green)', paddingBottom: '12px', marginBottom: '16px' }}>
                                         <div>
-                                            <h3 style={{ fontSize: '15px', fontWeight: 800, color: '#1F5535', margin: 0 }}>TITUS INSTITUTE OF TECHNOLOGY</h3>
-                                            <span style={{ fontSize: '10px', color: '#666', fontWeight: 500 }}>ACADEMIC YEAR: 2026-2027</span>
+                                            <h3 style={{ fontSize: '15px', fontWeight: 800, color: 'var(--primary-dark)', margin: 0 }}>TITUS INSTITUTE OF TECHNOLOGY</h3>
+                                            <span style={{ fontSize: '10px', color: 'var(--text-secondary)', fontWeight: 500 }}>ACADEMIC YEAR: 2026-2027</span>
                                         </div>
                                         <div style={{ textAlign: 'right' }}>
-                                            <span style={{ background: '#1F5535', color: 'white', padding: '3px 8px', borderRadius: '4px', fontSize: '9px', fontWeight: 700 }}>HALL TICKET</span>
+                                            <span style={{ background: 'var(--primary-green)', color: 'white', padding: '3px 8px', borderRadius: '4px', fontSize: '9px', fontWeight: 700 }}>HALL TICKET</span>
                                         </div>
                                     </div>
 
                                     <div style={{ display: 'grid', gridTemplateColumns: '1fr auto', gap: '20px', marginBottom: '16px' }}>
                                         <div style={{ display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '8px 12px', fontSize: '12px' }}>
-                                            <span style={{ color: '#555', fontWeight: 600 }}>Candidate:</span>
-                                            <strong style={{ color: '#1D1D1D' }}>Student (Demo Candidate)</strong>
-                                            <span style={{ color: '#555', fontWeight: 600 }}>Class / Div:</span>
-                                            <strong>{selectedAdmitCard.class}</strong>
-                                            <span style={{ color: '#555', fontWeight: 600 }}>Roll Number:</span>
-                                            <strong style={{ fontFamily: 'monospace' }}>TIT-2026-042</strong>
-                                            <span style={{ color: '#555', fontWeight: 600 }}>Subject:</span>
-                                            <strong style={{ color: '#1F5535' }}>{selectedAdmitCard.subject}</strong>
+                                            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Candidate:</span>
+                                            <strong style={{ color: 'var(--text-primary)' }}>Student (Demo Candidate)</strong>
+                                            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Class / Div:</span>
+                                            <strong style={{ color: 'var(--text-primary)' }}>{selectedAdmitCard.class}</strong>
+                                            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Roll Number:</span>
+                                            <strong style={{ fontFamily: 'monospace', color: 'var(--text-primary)' }}>TIT-2026-042</strong>
+                                            <span style={{ color: 'var(--text-secondary)', fontWeight: 600 }}>Subject:</span>
+                                            <strong style={{ color: 'var(--primary-dark)' }}>{selectedAdmitCard.subject}</strong>
                                         </div>
-                                        <div style={{ width: '80px', height: '80px', border: '1px solid #1F5535', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F8FAF8' }}>
+                                        <div style={{ width: '80px', height: '80px', border: '1px solid var(--border-color)', borderRadius: '8px', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--bg-color)' }}>
                                             <span style={{ fontSize: '24px' }}>🎓</span>
                                         </div>
                                     </div>
 
-                                    <div style={{ border: '1px solid #EAEAEA', borderRadius: '6px', background: '#F8FAF8', padding: '12px', marginBottom: '16px', fontSize: '11px', lineHeight: '1.4' }}>
+                                    <div style={{ border: '1px solid var(--border-color)', borderRadius: '6px', background: 'var(--bg-color)', padding: '12px', marginBottom: '16px', fontSize: '11px', lineHeight: '1.4', color: 'var(--text-secondary)' }}>
                                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px 12px' }}>
-                                            <div><strong>Date:</strong> {selectedAdmitCard.date}</div>
-                                            <div><strong>Time:</strong> {selectedAdmitCard.time}</div>
-                                            <div><strong>Duration:</strong> {selectedAdmitCard.duration}</div>
-                                            <div><strong>Room Center:</strong> {selectedAdmitCard.room}</div>
-                                            <div><strong>Invigilator:</strong> {selectedAdmitCard.examiner || 'Invigilator A'}</div>
-                                            <div><strong>Exam Type:</strong> {selectedAdmitCard.type}</div>
+                                            <div><strong style={{ color: 'var(--text-primary)' }}>Date:</strong> {selectedAdmitCard.date}</div>
+                                            <div><strong style={{ color: 'var(--text-primary)' }}>Time:</strong> {selectedAdmitCard.time}</div>
+                                            <div><strong style={{ color: 'var(--text-primary)' }}>Duration:</strong> {selectedAdmitCard.duration}</div>
+                                            <div><strong style={{ color: 'var(--text-primary)' }}>Room Center:</strong> {selectedAdmitCard.room}</div>
+                                            <div><strong style={{ color: 'var(--text-primary)' }}>Invigilator:</strong> {selectedAdmitCard.examiner || 'Invigilator A'}</div>
+                                            <div><strong style={{ color: 'var(--text-primary)' }}>Exam Type:</strong> {selectedAdmitCard.type}</div>
                                         </div>
                                     </div>
 
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', paddingTop: '20px', fontSize: '11px' }}>
                                         <div style={{ textAlign: 'center', width: '120px' }}>
-                                            <div style={{ borderBottom: '1px solid #D2D2D2', paddingBottom: '30px' }}></div>
-                                            <div style={{ marginTop: '4px', color: '#666', fontSize: '9px' }}>Candidate Signature</div>
+                                            <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '30px' }}></div>
+                                            <div style={{ marginTop: '4px', color: 'var(--text-secondary)', fontSize: '9px' }}>Candidate Signature</div>
                                         </div>
                                         <div style={{ textAlign: 'center', width: '120px' }}>
-                                            <div style={{ borderBottom: '1px solid #D2D2D2', paddingBottom: '30px', fontWeight: 600, color: '#1F5535', fontSize: '10px' }}>Dr. A. Rao</div>
-                                            <div style={{ marginTop: '4px', color: '#666', fontSize: '9px' }}>Controller of Exams</div>
+                                            <div style={{ borderBottom: '1px solid var(--border-color)', paddingBottom: '30px', fontWeight: 600, color: 'var(--primary-dark)', fontSize: '10px' }}>Dr. A. Rao</div>
+                                            <div style={{ marginTop: '4px', color: 'var(--text-secondary)', fontSize: '9px' }}>Controller of Exams</div>
                                         </div>
                                     </div>
                                 </div>
@@ -408,7 +408,7 @@ const Exams = () => {
                                 <h2 style={{ fontSize: '15px', fontWeight: 700 }}>📄 Printable Academic Report Card</h2>
                                 <button onClick={() => setSelectedReportCard(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)', fontSize: '18px' }}>✕</button>
                             </div>
-                            <div id="report-card-print-area" style={{ padding: '32px', background: 'white', color: '#1D1D1D', fontFamily: 'Inter, sans-serif' }}>
+                            <div id="report-card-print-area" style={{ padding: '32px', background: 'var(--card-white)', color: 'var(--text-primary)', fontFamily: 'Inter, sans-serif' }}>
                                 <div style={{ border: '2px solid #3B82F6', borderRadius: '12px', padding: '24px', position: 'relative' }}>
                                     {/* Watermark */}
                                     <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%) rotate(-30deg)', fontSize: '48px', fontWeight: 800, color: 'rgba(59, 130, 246, 0.05)', pointerEvents: 'none', userSelect: 'none', letterSpacing: '2px' }}>TITUS GRADE REPORT</div>

@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    Users, UserCheck, CalendarOff, UserPlus, Edit, Trash2,
-    Clock, ShieldAlert, MapPin, Phone, FileText, Calendar, Check, X, FileUp, User
+    Users, UserCheck, CalendarOff,
+    Clock, ShieldAlert, MapPin, Phone, FileText, Calendar, FileUp, User
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SegmentedControl from '../components/SegmentedControl';
@@ -39,7 +39,6 @@ const KPICard = ({ title, value, icon: Icon, color }) => (
 
 const Staff = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const { addToast } = useToast();
     
     const [activeTab, setActiveTab] = useState('overview');
@@ -299,7 +298,7 @@ const Staff = () => {
                                         <div>
                                             <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '16px' }}>Daily Attendance Punch Logs</h3>
                                             <div style={{ display: 'grid', gap: '10px' }}>
-                                                {['July 06', 'July 05', 'July 04'].map((day, idx) => (
+                                                {['July 06', 'July 05', 'July 04'].map((day) => (
                                                     <div key={day} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '12px', background: 'var(--bg-color)', borderRadius: '8px' }}>
                                                         <span>{day}, 2026</span>
                                                         <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>

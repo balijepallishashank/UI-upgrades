@@ -259,9 +259,9 @@
     margin-bottom: auto;
 }
 
-.btn-white {
+.announcement-card .btn-white {
     background: white;
-    color: var(--primary-dark);
+    color: #064E3B;
     border: none;
     padding: 8px 16px;
     border-radius: 6px;
@@ -302,4 +302,53 @@
     .dashboard-grid {
         grid-template-columns: 1fr;
     }
+}
+
+/* Dark Theme Enhancements */
+[data-theme='dark'] .card-title {
+    color: #F8FAFC !important;
+}
+
+[data-theme='dark'] .qa-item {
+    background: rgba(30, 41, 59, 0.6);
+    border-color: rgba(51, 65, 85, 0.7);
+}
+
+[data-theme='dark'] .qa-item:hover {
+    border-color: var(--primary-green);
+    background: rgba(30, 41, 59, 0.9);
+}
+
+[data-theme='dark'] .qa-info h4 {
+    color: #F8FAFC !important;
+}
+
+[data-theme='dark'] .qa-info p {
+    color: #94A3B8;
+}
+
+[data-theme='dark'] .qa-icon.green {
+    background: rgba(16, 185, 129, 0.25);
+    color: #34D399;
+}
+
+[data-theme='dark'] .summary-item {
+    background: rgba(30, 41, 59, 0.65);
+    border: 1px solid rgba(51, 65, 85, 0.6);
+}
+
+[data-theme='dark'] .summary-value {
+    color: #F8FAFC !important;
+}
+
+[data-theme='dark'] .view-full-report {
+    color: #34D399 !important;
+}
+
+[data-theme='dark'] .legend-value {
+    color: #F8FAFC !important;
+}
+
+[data-theme='dark'] .total-employees span:last-child {
+    color: #F8FAFC !important;
 }

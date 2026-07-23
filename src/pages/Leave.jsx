@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    CalendarOff, Clock, CheckCircle, XCircle, FileText, Calendar
+    Clock, CheckCircle, XCircle, FileText
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SegmentedControl from '../components/SegmentedControl';
@@ -40,7 +40,6 @@ const KPICard = ({ title, value, icon: Icon, color }) => (
 
 const Leave = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const { addToast } = useToast();
     
     const [activeTab, setActiveTab] = useState('overview');

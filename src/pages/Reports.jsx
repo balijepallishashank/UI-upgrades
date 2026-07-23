@@ -7,7 +7,6 @@ import {
 import PageTransition from '../components/PageTransition';
 import Badge from '../components/Badge';
 import { useToast } from '../contexts/ToastContext';
-import { LineChart, Line, ResponsiveContainer, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import { mockScheduledReports } from '../mockData';
 
 const itemVariants = {

@@ -4,7 +4,7 @@ import { useTheme } from '../contexts/ThemeContext';
 import { useToast } from '../contexts/ToastContext';
 import { 
     Sliders, Calendar, ShieldAlert, UserCheck, Server, Save, 
-    Moon, Sun, Shield, Key, Download, RefreshCw, Power, Bell
+    Moon, Sun, Shield, Download, RefreshCw, Bell
 } from 'lucide-react';
 import Badge from '../components/Badge';
 

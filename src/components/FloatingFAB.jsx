@@ -2,11 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Plus, Users, UserPlus, CalendarCheck, CalendarOff, Box, MessageSquare, FileText } from 'lucide-react';
-import { useToast } from '../contexts/ToastContext';
 
 const FloatingFAB = () => {
     const [isOpen, setIsOpen] = useState(false);
-    const { addToast } = useToast();
     const navigate = useNavigate();
 
     const actions = [
@@ -83,7 +81,7 @@ const FloatingFAB = () => {
                     width: '56px',
                     height: '56px',
                     borderRadius: '28px',
-                    background: 'var(--primary-dark)',
+                    background: 'linear-gradient(135deg, #10B981 0%, #059669 100%)',
                     border: 'none',
                     color: 'white',
                     display: 'flex',

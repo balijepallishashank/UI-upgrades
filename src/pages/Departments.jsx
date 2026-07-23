@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Building2, Users, Briefcase, Trash2, X, Plus } from 'lucide-react';
+import { Users, Briefcase, Trash2, Plus } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { mockDepartments, mockEmployees } from '../mockData';
 import AnimatedNumber from '../components/AnimatedNumber';

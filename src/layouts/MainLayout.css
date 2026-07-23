@@ -92,6 +92,12 @@
     z-index: 0;
 }
 
+[data-theme='dark'] .nav-item-active-bg {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.28) 0%, rgba(5, 150, 105, 0.2) 100%) !important;
+    border: 1px solid rgba(52, 211, 153, 0.4) !important;
+    border-radius: 8px;
+}
+
 .nav-item-content {
     position: relative;
     z-index: 1;
@@ -111,6 +117,12 @@
 .nav-item.active .nav-item-content {
     color: var(--primary-dark);
     font-weight: 600;
+}
+
+[data-theme='dark'] .nav-item.active .nav-item-content,
+[data-theme='dark'] .nav-item:hover .nav-item-content {
+    color: #34D399 !important;
+    font-weight: 700;
 }
 
 .nav-item-icon {
@@ -232,6 +244,7 @@
     border-radius: 8px;
     transition: all 0.2s ease;
 }
+
 .glass-btn:hover {
     background: rgba(163, 217, 92, 0.1);
     color: var(--primary-dark);
@@ -249,12 +262,15 @@
     border: 1px solid var(--border-color);
     border-radius: 8px;
     padding: 8px 16px;
-    width: 240px; /* Base width */
+    width: 240px;
+    /* Base width */
     gap: 8px;
     transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
 .search-bar:focus-within {
-    width: 340px; /* Expanded width */
+    width: 340px;
+    /* Expanded width */
     border-color: var(--primary-green);
     background: var(--card-white);
     box-shadow: 0 0 0 4px rgba(163, 217, 92, 0.1);
@@ -326,11 +342,13 @@
     display: flex;
     flex-direction: column;
 }
+
 .user-name {
     font-size: 13px;
     font-weight: 600;
     color: var(--text-primary);
 }
+
 .user-role {
     font-size: 11px;
     color: var(--text-secondary);
@@ -342,13 +360,13 @@
     top: calc(100% + 12px);
     right: 0;
     width: 280px;
-    background: rgba(255, 255, 255, 0.85);
+    background: var(--card-white);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     border-radius: 12px;
     padding: 8px;
-    box-shadow: 0 10px 40px -10px rgba(0,0,0,0.1);
+    box-shadow: var(--glass-shadow);
     z-index: 100;
     display: flex;
     flex-direction: column;
@@ -398,7 +416,8 @@
 
 .scroll-progress-bar {
     position: absolute;
-    bottom: -3px; /* Align to the bottom of the topbar */
+    bottom: -3px;
+    /* Align to the bottom of the topbar */
     left: 0;
     right: 0;
     height: 3px;
@@ -491,6 +510,7 @@
     cursor: pointer;
     transition: color 0.2s;
 }
+
 .notif-drawer-close-btn:hover {
     color: var(--danger);
 }
@@ -523,7 +543,7 @@
     width: 100%;
     max-width: 320px;
     text-align: center;
-    box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -649,9 +669,21 @@
 
 /* Shake Animation */
 @keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    20%, 60% { transform: translateX(-6px); }
-    40%, 80% { transform: translateX(6px); }
+
+    0%,
+    100% {
+        transform: translateX(0);
+    }
+
+    20%,
+    60% {
+        transform: translateX(-6px);
+    }
+
+    40%,
+    80% {
+        transform: translateX(6px);
+    }
 }
 
 .shake-anim {
@@ -689,9 +721,17 @@
 
 /* Padlock pulse animation */
 @keyframes padlockPulse {
-    0% { box-shadow: 0 0 0 0 rgba(6, 78, 59, 0.25); }
-    70% { box-shadow: 0 0 0 8px rgba(6, 78, 59, 0); }
-    100% { box-shadow: 0 0 0 0 rgba(6, 78, 59, 0); }
+    0% {
+        box-shadow: 0 0 0 0 rgba(6, 78, 59, 0.25);
+    }
+
+    70% {
+        box-shadow: 0 0 0 8px rgba(6, 78, 59, 0);
+    }
+
+    100% {
+        box-shadow: 0 0 0 0 rgba(6, 78, 59, 0);
+    }
 }
 
 .lock-btn-pulse:hover {

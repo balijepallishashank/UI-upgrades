@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     Bell, MessageSquare, Mail, Send, Copy
@@ -7,37 +7,11 @@ import {
 import PageTransition from '../components/PageTransition';
 import SegmentedControl from '../components/SegmentedControl';
 import Badge from '../components/Badge';
-import AnimatedNumber from '../components/AnimatedNumber';
 import { useToast } from '../contexts/ToastContext';
 import { mockNotifications, mockSMS, mockEmailDelivery } from '../mockData';
 
-const itemVariants = {
-    hidden: { opacity: 0, y: 15 },
-    show: { opacity: 1, y: 0, transition: { duration: 0.3 } }
-};
-
-const KPICard = ({ title, value, icon: Icon, color }) => (
-    <motion.div 
-        variants={itemVariants}
-        className="card"
-        style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}
-        whileHover={{ y: -4, scale: 1.01 }}
-    >
-        <div style={{ width: '44px', height: '44px', borderRadius: '10px', background: `${color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center', color: color }}>
-            <Icon size={20} />
-        </div>
-        <div>
-            <p style={{ fontSize: '12px', color: 'var(--text-secondary)', marginBottom: '2px' }}>{title}</p>
-            <h3 style={{ fontSize: '20px', fontWeight: '700', color: 'var(--text-primary)' }}>
-                {typeof value === 'number' ? <AnimatedNumber value={value} /> : value}
-            </h3>
-        </div>
-    </motion.div>
-);
-
 const Communication = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const { addToast } = useToast();
     
     const [activeTab, setActiveTab] = useState('overview');

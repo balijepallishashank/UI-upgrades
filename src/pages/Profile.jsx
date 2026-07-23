@@ -1,7 +1,7 @@
 import React from 'react';
 import PageTransition from '../components/PageTransition';
 import { useToast } from '../contexts/ToastContext';
-import { User, Mail, Shield, Key, History, Save } from 'lucide-react';
+import { User, Mail, Shield, Key, Save } from 'lucide-react';
 
 const Profile = () => {
     const { addToast } = useToast();

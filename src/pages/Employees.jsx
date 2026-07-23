@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    Users, UserCheck, CalendarOff, UserPlus, Edit, Trash2,
-    Briefcase, Building2, FileText, Phone, Mail, Clock,
+    Users, UserCheck, CalendarOff,
+    Building2, FileText, Phone, Clock,
     TrendingUp, Star, FileUp, User, Download
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
@@ -724,7 +724,6 @@ const Employees = () => {
                             </div>
                         </div>
                     )}
-
                 </motion.div>
             </AnimatePresence>
 
@@ -735,27 +734,27 @@ const Employees = () => {
                         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                         <motion.div initial={{ scale: 0.85, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, y: 20 }} transition={{ type: 'spring', stiffness: 280, damping: 25 }}
                             onClick={e => e.stopPropagation()}
-                            style={{ background: 'white', borderRadius: '20px', padding: '36px', maxWidth: '560px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.25)', position: 'relative' }}>
-                            <button onClick={() => setShowPaySlip(null)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#666' }}>✕</button>
-                            <div style={{ textAlign: 'center', borderBottom: '2px solid #1F5535', paddingBottom: '16px', marginBottom: '24px' }}>
-                                <div style={{ fontWeight: 700, color: '#1F5535', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>TITUS Institute of Technology</div>
-                                <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#1D1D1D', margin: '8px 0 0' }}>Salary Pay Slip — {showPaySlip.month}</h2>
+                            style={{ background: 'var(--card-white)', border: '1px solid var(--border-color)', borderRadius: '20px', padding: '36px', maxWidth: '560px', width: '100%', boxShadow: 'var(--glass-shadow)', position: 'relative' }}>
+                            <button onClick={() => setShowPaySlip(null)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: 'var(--text-secondary)' }}>✕</button>
+                            <div style={{ textAlign: 'center', borderBottom: '2px solid var(--primary-green)', paddingBottom: '16px', marginBottom: '24px' }}>
+                                <div style={{ fontWeight: 700, color: 'var(--primary-dark)', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase' }}>TITUS Institute of Technology</div>
+                                <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', margin: '8px 0 0' }}>Salary Pay Slip — {showPaySlip.month}</h2>
                             </div>
-                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', background: '#f8fafc', borderRadius: '12px', padding: '16px' }}>
+                            <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px', background: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '16px' }}>
                                 <img src={showPaySlip.avatar} alt={showPaySlip.name} style={{ width: '52px', height: '52px', borderRadius: '50%', objectFit: 'cover' }} />
                                 <div>
-                                    <div style={{ fontWeight: 700, fontSize: '16px', color: '#1D1D1D' }}>{showPaySlip.name}</div>
-                                    <div style={{ fontSize: '12px', color: '#587290' }}>{showPaySlip.role} • {showPaySlip.department}</div>
-                                    <div style={{ fontSize: '11px', color: '#587290' }}>Bank: {showPaySlip.bankAccount} • IFSC: {showPaySlip.ifsc}</div>
+                                    <div style={{ fontWeight: 700, fontSize: '16px', color: 'var(--text-primary)' }}>{showPaySlip.name}</div>
+                                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{showPaySlip.role} • {showPaySlip.department}</div>
+                                    <div style={{ fontSize: '11px', color: 'var(--text-secondary)' }}>Bank: {showPaySlip.bankAccount} • IFSC: {showPaySlip.ifsc}</div>
                                 </div>
                             </div>
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '20px' }}>
                                 <div>
                                     <div style={{ fontSize: '12px', fontWeight: 700, color: '#22C55E', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Earnings</div>
                                     {[['Basic Pay', showPaySlip.basic], ['HRA', showPaySlip.hra], ['DA', showPaySlip.da], ['TA', showPaySlip.ta]].map(([k, v]) => (
-                                        <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #f0f0f0', fontSize: '13px' }}>
-                                            <span style={{ color: '#587290' }}>{k}</span>
-                                            <span style={{ fontWeight: 500 }}>₹{v.toLocaleString()}</span>
+                                        <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid var(--border-color)', fontSize: '13px' }}>
+                                            <span style={{ color: 'var(--text-secondary)' }}>{k}</span>
+                                            <span style={{ fontWeight: 500, color: 'var(--text-primary)' }}>₹{v.toLocaleString()}</span>
                                         </div>
                                     ))}
                                     <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0 0', fontSize: '14px', fontWeight: 700, color: '#22C55E' }}>
@@ -765,19 +764,19 @@ const Employees = () => {
                                 <div>
                                     <div style={{ fontSize: '12px', fontWeight: 700, color: '#EF4444', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Deductions</div>
                                     {[['Provident Fund', showPaySlip.pf], ['Income Tax', showPaySlip.tax]].map(([k, v]) => (
-                                        <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid #f0f0f0', fontSize: '13px' }}>
-                                            <span style={{ color: '#587290' }}>{k}</span>
+                                        <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '6px 0', borderBottom: '1px solid var(--border-color)', fontSize: '13px' }}>
+                                            <span style={{ color: 'var(--text-secondary)' }}>{k}</span>
                                             <span style={{ fontWeight: 500, color: '#EF4444' }}>-₹{v.toLocaleString()}</span>
                                         </div>
                                     ))}
-                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0 0', fontSize: '14px', fontWeight: 700, color: '#1F5535' }}>
+                                    <div style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0 0', fontSize: '14px', fontWeight: 700, color: 'var(--primary-dark)' }}>
                                         <span>Net Pay</span><span>₹{showPaySlip.netPay.toLocaleString()}</span>
                                     </div>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} style={{ flex: 1, padding: '11px', background: '#1F5535', color: 'white', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>🖨️ Print Slip</motion.button>
-                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowPaySlip(null)} style={{ padding: '11px 20px', background: 'none', border: '1px solid #EAEAEA', borderRadius: '10px', fontSize: '14px', cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>Close</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} className="btn-primary" style={{ flex: 1, padding: '11px' }}>🖨️ Print Slip</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowPaySlip(null)} className="btn-white" style={{ padding: '11px 20px' }}>Close</motion.button>
                             </div>
                         </motion.div>
                     </motion.div>

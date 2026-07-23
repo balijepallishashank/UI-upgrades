@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    CalendarCheck, Users, Clock, Calendar,
-    Filter, Download, UserX, GraduationCap, CalendarOff,
+    CalendarCheck, Users, Clock,
+    Download, UserX, GraduationCap, CalendarOff,
     Palmtree, UserCircle, ChevronRight
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
@@ -14,7 +14,7 @@ import Badge from '../components/Badge';
 import AnimatedNumber from '../components/AnimatedNumber';
 import { useToast } from '../contexts/ToastContext';
 import { mockAttendance, weeklyAttendanceData, mockStudents, mockEmployees } from '../mockData';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, LineChart, Line } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend } from 'recharts';
 
 const itemVariants = {
     hidden: { opacity: 0, y: 15 },
@@ -126,7 +126,6 @@ const reportTemplates = [
 
 const Attendance = () => {
     const location = useLocation();
-    const navigate = useNavigate();
     const { addToast } = useToast();
     
     const [activeTab, setActiveTab] = useState('overview');
@@ -141,7 +140,6 @@ const Attendance = () => {
     const [selectedTarget, setSelectedTarget] = useState('Students');
     const [selectedClass, setSelectedClass] = useState('CS-A');
     const [selectedDept, setSelectedDept] = useState('Computer Science');
-    const [searchTerm, setSearchTerm] = useState('');
     const [statusFilter, setStatusFilter] = useState('All');
     
     // States for Attendance Reports Management

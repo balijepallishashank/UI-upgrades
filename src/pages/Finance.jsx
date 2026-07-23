@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-    IndianRupee, TrendingUp, Users, AlertCircle, Edit, Trash2, 
-    Download, Filter, Search, RefreshCw, Send, ClipboardCheck, ArrowRight
+import {
+    IndianRupee, TrendingUp, Users, AlertCircle, Search
 } from 'lucide-react';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, BarChart, Bar, Legend } from 'recharts';
 import PageTransition from '../components/PageTransition';
@@ -20,7 +19,7 @@ const itemVariants = {
 };
 
 const KPICard = ({ title, value, icon: Icon, color, subtext }) => (
-    <motion.div 
+    <motion.div
         variants={itemVariants}
         className="card"
         style={{ padding: '20px', display: 'flex', alignItems: 'center', gap: '16px' }}
@@ -42,7 +41,7 @@ const KPICard = ({ title, value, icon: Icon, color, subtext }) => (
 const Finance = () => {
     const location = useLocation();
     const { addToast } = useToast();
-    
+
     const [activeTab, setActiveTab] = useState('overview');
     const [ledgerSearch, setLedgerSearch] = useState('');
     const [duesSearch, setDuesSearch] = useState('');
@@ -68,10 +67,10 @@ const Finance = () => {
     }, [location]);
 
     const sendReminder = (student, amount) => {
-        addToast({ 
-            type: 'success', 
-            title: 'SMS Sent', 
-            message: `Defaulter notice dispatched to parent of ${student} for ${amount}.` 
+        addToast({
+            type: 'success',
+            title: 'SMS Sent',
+            message: `Defaulter notice dispatched to parent of ${student} for ${amount}.`
         });
     };
 
@@ -100,11 +99,13 @@ const Finance = () => {
         { header: 'Amount Due', accessor: 'amount', render: (row) => <span style={{ color: 'var(--danger)', fontWeight: 600 }}>{row.amount}</span> },
         { header: 'Due Date', accessor: 'dueDate' },
         { header: 'Status', accessor: 'status', render: (row) => <Badge type={row.status === 'Pending' ? 'Warning' : row.status === 'Overdue' ? 'Absent' : 'Success'} text={row.status} /> },
-        { header: 'Actions', accessor: 'action', render: (row) => (
-            <button className="btn-white" style={{ padding: '4px 10px', fontSize: '11px' }} onClick={() => sendReminder(row.student, row.amount)}>
-                Remind
-            </button>
-        ) }
+        {
+            header: 'Actions', accessor: 'action', render: (row) => (
+                <button className="btn-white" style={{ padding: '4px 10px', fontSize: '11px' }} onClick={() => sendReminder(row.student, row.amount)}>
+                    Remind
+                </button>
+            )
+        }
     ];
 
     const transactionColumns = [
@@ -118,11 +119,11 @@ const Finance = () => {
     ];
 
     // Filtered data based on search params
-    const filteredDues = mockFinanceDueList.filter(d => 
+    const filteredDues = mockFinanceDueList.filter(d =>
         d.student.toLowerCase().includes(duesSearch.toLowerCase())
     );
 
-    const filteredLedger = mockFeeTransactions.filter(t => 
+    const filteredLedger = mockFeeTransactions.filter(t =>
         t.student.toLowerCase().includes(ledgerSearch.toLowerCase())
     );
 
@@ -164,8 +165,8 @@ const Finance = () => {
                                 <KPICard title="Monthly Revenue Goal" value="₹18.4L" icon={Users} color="#8B5CF6" subtext="92% of target collected" />
                             </div>
 
-                             {/* Charts split */}
-                             <div className="responsive-split-grid">
+                            {/* Charts split */}
+                            <div className="responsive-split-grid">
                                 {/* Area Chart */}
                                 <div className="card" style={{ padding: '24px' }}>
                                     <h3 style={{ fontSize: '15px', fontWeight: 600, marginBottom: '16px' }}>Collection Trend (July 2026)</h3>
@@ -174,8 +175,8 @@ const Finance = () => {
                                             <AreaChart data={collectionTrendData}>
                                                 <defs>
                                                     <linearGradient id="colorAmt" x1="0" y1="0" x2="0" y2="1">
-                                                        <stop offset="5%" stopColor="#22C55E" stopOpacity={0.2}/>
-                                                        <stop offset="95%" stopColor="#22C55E" stopOpacity={0}/>
+                                                        <stop offset="5%" stopColor="#22C55E" stopOpacity={0.2} />
+                                                        <stop offset="95%" stopColor="#22C55E" stopOpacity={0} />
                                                     </linearGradient>
                                                 </defs>
                                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border-color)" />
@@ -213,10 +214,10 @@ const Finance = () => {
                             {/* Search Filter Bar */}
                             <div className="card" style={{ padding: '16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
                                 <Search size={18} color="var(--text-secondary)" />
-                                <input 
-                                    type="text" 
-                                    placeholder="Filter by Student Name..." 
-                                    value={ledgerSearch} 
+                                <input
+                                    type="text"
+                                    placeholder="Filter by Student Name..."
+                                    value={ledgerSearch}
                                     onChange={(e) => setLedgerSearch(e.target.value)}
                                     style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: '13px', color: 'var(--text-primary)' }}
                                 />
@@ -225,7 +226,7 @@ const Finance = () => {
                                 )}
                             </div>
 
-                            <DataTable 
+                            <DataTable
                                 title="Transaction Ledger Stream"
                                 columns={transactionColumns}
                                 data={filteredLedger}
@@ -236,15 +237,15 @@ const Finance = () => {
 
                     {/* 3. FEE DUES & STRUCTURE */}
                     {activeTab === 'dues' && (
-                         <div className="responsive-split-grid">
+                        <div className="responsive-split-grid">
                             {/* Dues List */}
                             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                 <div className="card" style={{ padding: '12px 16px', display: 'flex', gap: '12px', alignItems: 'center' }}>
                                     <Search size={18} color="var(--text-secondary)" />
-                                    <input 
-                                        type="text" 
-                                        placeholder="Search Defaulter Name..." 
-                                        value={duesSearch} 
+                                    <input
+                                        type="text"
+                                        placeholder="Search Defaulter Name..."
+                                        value={duesSearch}
                                         onChange={(e) => setDuesSearch(e.target.value)}
                                         style={{ flex: 1, border: 'none', outline: 'none', background: 'transparent', fontSize: '13px' }}
                                     />
@@ -252,7 +253,7 @@ const Finance = () => {
                                         <button onClick={() => setDuesSearch('')} style={{ padding: '4px 8px', fontSize: '11px', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-secondary)' }}>Clear</button>
                                     )}
                                 </div>
-                                <DataTable 
+                                <DataTable
                                     title="Student Outstanding Dues"
                                     columns={duesColumns}
                                     data={filteredDues}
@@ -350,28 +351,28 @@ const Finance = () => {
                     <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setShowReceiptModal(null)}
                         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                         <motion.div initial={{ scale: 0.85 }} animate={{ scale: 1 }} exit={{ scale: 0.85 }} onClick={e => e.stopPropagation()}
-                            style={{ background: 'white', borderRadius: '20px', padding: '36px', maxWidth: '480px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.25)', position: 'relative' }}>
-                            <button onClick={() => setShowReceiptModal(null)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#666' }}>✕</button>
+                            style={{ background: 'var(--card-white)', border: '1px solid var(--border-color)', borderRadius: '20px', padding: '36px', maxWidth: '480px', width: '100%', boxShadow: 'var(--glass-shadow)', position: 'relative' }}>
+                            <button onClick={() => setShowReceiptModal(null)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: 'var(--text-secondary)' }}>✕</button>
                             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
                                 <div style={{ fontSize: '28px', marginBottom: '8px' }}>🧾</div>
-                                <div style={{ fontSize: '13px', fontWeight: 700, color: '#1F5535', textTransform: 'uppercase', letterSpacing: '1px' }}>TITUS Institute of Technology</div>
-                                <h2 style={{ fontSize: '20px', fontWeight: 800, color: '#1D1D1D', margin: '6px 0 0' }}>Payment Receipt</h2>
-                                <div style={{ fontSize: '12px', color: '#587290', marginTop: '2px' }}>Receipt No: {showReceiptModal.id}</div>
+                                <div style={{ fontSize: '13px', fontWeight: 700, color: 'var(--primary-dark)', textTransform: 'uppercase', letterSpacing: '1px' }}>TITUS Institute of Technology</div>
+                                <h2 style={{ fontSize: '20px', fontWeight: 800, color: 'var(--text-primary)', margin: '6px 0 0' }}>Payment Receipt</h2>
+                                <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '2px' }}>Receipt No: {showReceiptModal.id}</div>
                             </div>
-                            <div style={{ background: '#f8fafc', borderRadius: '12px', padding: '18px', marginBottom: '24px' }}>
+                            <div style={{ background: 'var(--bg-color)', border: '1px solid var(--border-color)', borderRadius: '12px', padding: '18px', marginBottom: '24px' }}>
                                 {[['Student Name', showReceiptModal.student], ['Class', showReceiptModal.class], ['Fee Category', showReceiptModal.category], ['Payment Mode', showReceiptModal.method], ['Date', showReceiptModal.date], ['Status', '✔ Paid']].map(([k, v]) => (
-                                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid #EAEAEA', fontSize: '13px' }}>
-                                        <span style={{ color: '#587290' }}>{k}</span>
-                                        <span style={{ fontWeight: 600, color: k === 'Status' ? '#22C55E' : '#1D1D1D' }}>{v}</span>
+                                    <div key={k} style={{ display: 'flex', justifyContent: 'space-between', padding: '7px 0', borderBottom: '1px solid var(--border-color)', fontSize: '13px' }}>
+                                        <span style={{ color: 'var(--text-secondary)' }}>{k}</span>
+                                        <span style={{ fontWeight: 600, color: k === 'Status' ? '#22C55E' : 'var(--text-primary)' }}>{v}</span>
                                     </div>
                                 ))}
-                                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '12px', fontSize: '16px', fontWeight: 800, color: '#1F5535' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', paddingTop: '12px', fontSize: '16px', fontWeight: 800, color: 'var(--primary-dark)' }}>
                                     <span>Amount Paid</span><span>₹{showReceiptModal.amount}</span>
                                 </div>
                             </div>
                             <div style={{ display: 'flex', gap: '12px' }}>
-                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} style={{ flex: 1, padding: '11px', background: '#1F5535', color: 'white', border: 'none', borderRadius: '10px', fontSize: '14px', fontWeight: 600, cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>🖨️ Print Receipt</motion.button>
-                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowReceiptModal(null)} style={{ padding: '11px 20px', background: 'none', border: '1px solid #EAEAEA', borderRadius: '10px', fontSize: '14px', cursor: 'pointer', fontFamily: 'Inter,sans-serif' }}>Close</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }} onClick={() => window.print()} className="btn-primary" style={{ flex: 1, padding: '11px' }}>🖨️ Print Receipt</motion.button>
+                                <motion.button whileHover={{ scale: 1.02 }} onClick={() => setShowReceiptModal(null)} className="btn-white" style={{ padding: '11px 20px' }}>Close</motion.button>
                             </div>
                         </motion.div>
                     </motion.div>
@@ -385,40 +386,40 @@ const Finance = () => {
                         style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', backdropFilter: 'blur(8px)', zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
                         <motion.div initial={{ scale: 0.85, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.85, y: 20 }} transition={{ type: 'spring', stiffness: 280, damping: 25 }}
                             onClick={e => e.stopPropagation()}
-                            style={{ background: 'white', borderRadius: '20px', padding: '36px', maxWidth: '560px', width: '100%', boxShadow: '0 24px 80px rgba(0,0,0,0.25)', position: 'relative' }}>
-                            <button onClick={() => setShowCollectModal(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: '#666' }}>✕</button>
-                            <h3 style={{ fontSize: '18px', fontWeight: 700, color: '#1D1D1D', marginBottom: '6px' }}>💳 Record Student Fee Collection</h3>
-                            <p style={{ fontSize: '13px', color: '#587290', marginBottom: '24px' }}>Record cash or other offline fee collections and generate a receipt.</p>
+                            style={{ background: 'var(--card-white)', border: '1px solid var(--border-color)', borderRadius: '20px', padding: '36px', maxWidth: '560px', width: '100%', boxShadow: 'var(--glass-shadow)', position: 'relative' }}>
+                            <button onClick={() => setShowCollectModal(false)} style={{ position: 'absolute', top: 16, right: 16, background: 'none', border: 'none', cursor: 'pointer', fontSize: '20px', color: 'var(--text-secondary)' }}>✕</button>
+                            <h3 style={{ fontSize: '18px', fontWeight: 700, color: 'var(--text-primary)', marginBottom: '6px' }}>💳 Record Student Fee Collection</h3>
+                            <p style={{ fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '24px' }}>Record cash or other offline fee collections and generate a receipt.</p>
                             <form onSubmit={handleCollectSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                                 <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '16px' }}>
                                     <div>
-                                        <label style={{ fontSize: '12px', fontWeight: 600, color: '#587290', display: 'block', marginBottom: '4px' }}>Student Name *</label>
-                                        <input type="text" placeholder="Enter student name" value={collectForm.student} onChange={e => setCollectForm(f => ({...f, student: e.target.value}))} required style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #EAEAEA', color: '#1D1D1D' }} />
+                                        <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Student Name *</label>
+                                        <input type="text" placeholder="Enter student name" value={collectForm.student} onChange={e => setCollectForm(f => ({ ...f, student: e.target.value }))} required style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)' }} />
                                     </div>
                                     <div>
-                                        <label style={{ fontSize: '12px', fontWeight: 600, color: '#587290', display: 'block', marginBottom: '4px' }}>Class</label>
-                                        <select value={collectForm.class} onChange={e => setCollectForm(f => ({...f, class: e.target.value}))} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #EAEAEA', color: '#1D1D1D' }}>
-                                            {['CS-A','CS-B','IT-A','IT-B','ECE-A'].map(c => <option key={c}>{c}</option>)}
+                                        <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Class</label>
+                                        <select value={collectForm.class} onChange={e => setCollectForm(f => ({ ...f, class: e.target.value }))} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)' }}>
+                                            {['CS-A', 'CS-B', 'IT-A', 'IT-B', 'ECE-A'].map(c => <option key={c}>{c}</option>)}
                                         </select>
                                     </div>
                                 </div>
                                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
                                     <div>
-                                        <label style={{ fontSize: '12px', fontWeight: 600, color: '#587290', display: 'block', marginBottom: '4px' }}>Fee Category</label>
-                                        <select value={collectForm.category} onChange={e => setCollectForm(f => ({...f, category: e.target.value}))} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #EAEAEA', color: '#1D1D1D' }}>
-                                            {['Tuition Fee','Exam Fee','Library Fee','Lab Fee','Transport Fee','Hostel Fee'].map(c => <option key={c}>{c}</option>)}
+                                        <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Fee Category</label>
+                                        <select value={collectForm.category} onChange={e => setCollectForm(f => ({ ...f, category: e.target.value }))} style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)' }}>
+                                            {['Tuition Fee', 'Exam Fee', 'Library Fee', 'Lab Fee', 'Transport Fee', 'Hostel Fee'].map(c => <option key={c}>{c}</option>)}
                                         </select>
                                     </div>
                                     <div>
-                                        <label style={{ fontSize: '12px', fontWeight: 600, color: '#587290', display: 'block', marginBottom: '4px' }}>Amount (₹) *</label>
-                                        <input type="number" placeholder="Enter amount" value={collectForm.amount} onChange={e => setCollectForm(f => ({...f, amount: e.target.value}))} required style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid #EAEAEA', color: '#1D1D1D' }} />
+                                        <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Amount (₹) *</label>
+                                        <input type="number" placeholder="Enter amount" value={collectForm.amount} onChange={e => setCollectForm(f => ({ ...f, amount: e.target.value }))} required style={{ width: '100%', padding: '10px', borderRadius: '6px', border: '1px solid var(--border-color)', background: 'var(--bg-color)', color: 'var(--text-primary)' }} />
                                     </div>
                                 </div>
                                 <div>
-                                    <label style={{ fontSize: '12px', fontWeight: 600, color: '#587290', display: 'block', marginBottom: '4px' }}>Payment Method</label>
+                                    <label style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-secondary)', display: 'block', marginBottom: '4px' }}>Payment Method</label>
                                     <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
                                         {['Cash', 'UPI', 'Cheque', 'NEFT', 'DD'].map(m => (
-                                            <button key={m} type="button" onClick={() => setCollectForm(f => ({...f, method: m}))} style={{ padding: '8px 18px', borderRadius: '20px', border: `1px solid ${collectForm.method === m ? '#1F5535' : '#EAEAEA'}`, background: collectForm.method === m ? '#1F5535' : 'transparent', color: collectForm.method === m ? 'white' : '#1D1D1D', fontSize: '13px', cursor: 'pointer', fontWeight: collectForm.method === m ? 600 : 400 }}>{m}</button>
+                                            <button key={m} type="button" onClick={() => setCollectForm(f => ({ ...f, method: m }))} style={{ padding: '8px 18px', borderRadius: '20px', border: `1px solid ${collectForm.method === m ? 'var(--primary-green)' : 'var(--border-color)'}`, background: collectForm.method === m ? 'var(--primary-green)' : 'var(--bg-color)', color: collectForm.method === m ? 'white' : 'var(--text-primary)', fontSize: '13px', cursor: 'pointer', fontWeight: collectForm.method === m ? 600 : 400 }}>{m}</button>
                                         ))}
                                     </div>
                                 </div>

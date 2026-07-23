@@ -1,73 +1,86 @@
 import React, { useState } from 'react';
-import { Search, IndianRupee, AlertCircle } from 'lucide-react';
+import { Search } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import Badge from '../components/Badge';
 import { mockStudents } from '../mockData';
 
-const DuesList = () => {
-    // Exact records from screenshot + mapping of mockStudents for full directory coverage
-    const initialLedgers = [
-        {
-            name: "MD.RAYAN RAZA",
-            class: "1ST",
-            parent: "RAJAUL ARFIN",
-            phone: "9341772168",
-            paidMonths: "Apr '26",
-            lastPayment: "28 Jun 2026, 12:17",
-            mode: "Cash",
-            hasDues: false
-        },
-        {
-            name: "MOHAMMAD ARSALAN",
-            class: "UKG",
-            parent: "MD RASHID ANWAR",
-            phone: "8969575004",
-            paidMonths: "-",
-            lastPayment: "-",
-            mode: "-",
-            hasDues: true
-        },
-        {
-            name: "AADITYA KUMAR",
-            class: "7TH",
-            parent: "MUKESH KUMAR",
-            phone: "7766819604",
-            paidMonths: "-",
-            lastPayment: "-",
-            mode: "-",
-            hasDues: true
-        },
-        {
-            name: "AADRSH",
-            class: "LKG",
-            parent: "DAULAT SINGH",
-            phone: "9113135287",
-            paidMonths: "-",
-            lastPayment: "-",
-            mode: "-",
-            hasDues: true
-        },
-        // Spread standard mock students as unpaid/paid for realistic listing
-        ...mockStudents.map((s, idx) => ({
-            name: s.name.toUpperCase(),
-            class: s.class,
-            parent: s.parentName ? s.parentName.toUpperCase() : "PARENT NAME",
-            phone: s.parentPhone || "9999999999",
-            paidMonths: idx % 3 === 0 ? "Jun '26" : "-",
-            lastPayment: idx % 3 === 0 ? "05 Jul 2026, 10:30" : "-",
-            mode: idx % 3 === 0 ? "UPI" : "-",
-            hasDues: idx % 3 !== 0
-        }))
-    ];
+// ── Static Ledger Records & Class Filter Options ──
+const INITIAL_LEDGERS = [
+    {
+        name: "MD.RAYAN RAZA",
+        class: "1ST",
+        parent: "RAJAUL ARFIN",
+        phone: "9341772168",
+        paidMonths: "Apr '26",
+        lastPayment: "28 Jun 2026, 12:17",
+        mode: "Cash",
+        hasDues: false
+    },
+    {
+        name: "MOHAMMAD ARSALAN",
+        class: "UKG",
+        parent: "MD RASHID ANWAR",
+        phone: "8969575004",
+        paidMonths: "-",
+        lastPayment: "-",
+        mode: "-",
+        hasDues: true
+    },
+    {
+        name: "AADITYA KUMAR",
+        class: "7TH",
+        parent: "MUKESH KUMAR",
+        phone: "7766819604",
+        paidMonths: "-",
+        lastPayment: "-",
+        mode: "-",
+        hasDues: true
+    },
+    {
+        name: "DIVYANSHU KUMAR",
+        class: "6TH",
+        parent: "MANOJ KUMAR CHOUDHARY",
+        phone: "9122557454",
+        paidMonths: "-",
+        lastPayment: "-",
+        mode: "-",
+        hasDues: true
+    },
+    {
+        name: "NISHANT PRASAD",
+        class: "5TH",
+        parent: "SHANKAR PRASAD",
+        phone: "9304380625",
+        paidMonths: "Apr '26",
+        lastPayment: "28 Jun 2026, 11:29",
+        mode: "Cash",
+        hasDues: false
+    },
 
-    const [ledgers, setLedgers] = useState(initialLedgers);
+    // Map additional mock directory students for complete ledger coverage
+    ...mockStudents.map(s => ({
+        name: s.name.toUpperCase(),
+        class: s.class,
+        parent: s.guardian || "PARENT / GUARDIAN",
+        phone: s.phone || "9876543210",
+        paidMonths: s.status === 'Present' ? "Apr '26" : "-",
+        lastPayment: s.status === 'Present' ? "28 Jun 2026, 10:00" : "-",
+        mode: s.status === 'Present' ? "UPI / Card" : "-",
+        hasDues: s.status !== 'Present'
+    }))
+];
+
+const CLASSES_LIST = [
+    "All Classes", "LKG", "UKG", "1ST", "2ND", "3RD", "4TH", "5TH", 
+    "6TH", "7TH", "8TH", "9TH", "10TH", "CS-A", "CS-B", "IT-A", "IT-B"
+];
+
+const DuesList = () => {
     const [selectedClass, setSelectedClass] = useState("All Classes");
     const [duesFilter, setDuesFilter] = useState("All");
     const [searchQuery, setSearchQuery] = useState("");
 
-    const classesList = ["All Classes", "LKG", "UKG", "1ST", "2ND", "3RD", "4TH", "5TH", "6TH", "7TH", "8TH", "9TH", "10TH", "CS-A", "CS-B", "IT-A", "IT-B"];
-
-    const filteredLedgers = ledgers.filter(item => {
+    const filteredLedgers = INITIAL_LEDGERS.filter(item => {
         // Class Filter
         if (selectedClass !== "All Classes" && item.class !== selectedClass) return false;
 
@@ -96,7 +109,7 @@ const DuesList = () => {
                         <span>📊</span> Fee Payments / Student Ledger
                     </h1>
                     <p style={{ color: 'var(--text-secondary)', marginTop: '4px' }}>
-                        Search students, filter tracking records, and click rows to see full history.
+                        Search students, filter tracking records, and view institutional fee ledger status.
                     </p>
                 </div>
             </div>
@@ -110,7 +123,7 @@ const DuesList = () => {
                         onChange={e => setSelectedClass(e.target.value)}
                         style={{ padding: '10px', borderRadius: '8px', border: '1px solid var(--border-color)', background: 'var(--card-white)', color: 'var(--text-primary)', fontSize: '13px', outline: 'none' }}
                     >
-                        {classesList.map(c => <option key={c} value={c}>{c}</option>)}
+                        {CLASSES_LIST.map(c => <option key={c} value={c}>{c}</option>)}
                     </select>
                 </div>
 
@@ -167,7 +180,7 @@ const DuesList = () => {
                                 </tr>
                             ) : (
                                 filteredLedgers.map((item, idx) => (
-                                    <tr key={idx} style={{ borderBottom: '1px solid var(--border-color)', hover: { background: 'var(--bg-color)' } }}>
+                                    <tr key={idx} style={{ borderBottom: '1px solid var(--border-color)' }}>
                                         <td style={{ padding: '14px 16px', color: 'var(--text-secondary)' }}>{idx + 1}</td>
                                         <td style={{ padding: '14px 16px', fontWeight: 700, color: 'var(--text-primary)' }}>{item.name}</td>
                                         <td style={{ padding: '14px 16px', fontWeight: 500 }}>{item.class}</td>

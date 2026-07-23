@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Edit, Trash2, Plus, Save } from 'lucide-react';
+import { Edit, Trash2, Save } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import { useToast } from '../contexts/ToastContext';
 

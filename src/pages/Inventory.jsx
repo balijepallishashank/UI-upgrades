@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-    Box, ShoppingCart, AlertTriangle, ArrowRight, Edit, Trash2,
-    Filter, Search, CheckCircle, XCircle, Plus, FileText, Download
+    Box, ShoppingCart, AlertTriangle,
+    Filter, Search, CheckCircle, XCircle
 } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
 import PageTransition from '../components/PageTransition';

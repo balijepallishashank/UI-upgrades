@@ -122,7 +122,7 @@ const generateAttendanceRecords = () => {
     let recordIndex = 1;
     
     // Students
-    mockStudents.forEach((student, index) => {
+    mockStudents.forEach((student) => {
         const timeIn = student.status === 'Present' ? '08:45 AM' : student.status === 'Late' ? '09:15 AM' : '--';
         const timeOut = student.status === 'Present' || student.status === 'Late' ? '03:30 PM' : '--';
         records.push({
@@ -139,7 +139,7 @@ const generateAttendanceRecords = () => {
     });
 
     // Employees
-    mockEmployees.forEach((emp, index) => {
+    mockEmployees.forEach((emp) => {
         const timeIn = emp.status === 'Present' ? '08:50 AM' : emp.status === 'Late' ? '09:20 AM' : '--';
         const timeOut = emp.status === 'Present' || emp.status === 'Late' ? '04:30 PM' : '--';
         records.push({
@@ -156,7 +156,7 @@ const generateAttendanceRecords = () => {
     });
 
     // Support Staff
-    mockStaff.forEach((stf, index) => {
+    mockStaff.forEach((stf) => {
         const timeIn = stf.status === 'Present' ? '07:55 AM' : stf.status === 'Late' ? '08:30 AM' : '--';
         const timeOut = stf.status === 'Present' || stf.status === 'Late' ? '04:00 PM' : '--';
         records.push({
@@ -511,7 +511,7 @@ export const mockPayroll = mockEmployees.map((emp, i) => {
 });
 
 // Leave Balance per Employee
-export const mockLeaveBalance = mockEmployees.slice(0, 30).map((emp, i) => {
+export const mockLeaveBalance = mockEmployees.slice(0, 30).map((emp) => {
     const casualTotal = 12, sickTotal = 10, earnedTotal = 15, emergencyTotal = 3;
     const casualUsed = randomRange(0, 8);
     const sickUsed = randomRange(0, 6);

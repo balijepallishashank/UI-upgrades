@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Outlet, NavLink, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { Outlet, NavLink, useNavigate, useLocation, Navigate } from 'react-router-dom';
 import { motion, AnimatePresence, useScroll, useSpring } from 'framer-motion';
-import { 
+import {
     LayoutDashboard, Users, CalendarCheck, CalendarOff, Settings, LogOut,
     PieChart, Search, ChevronDown, ChevronRight, ChevronLeft, ChevronUp,
-    GraduationCap, UserCircle, School, Calendar, Bell, 
+    GraduationCap, UserCircle, School, Calendar, Bell,
     MessageSquare, User, Menu, Moon, Sun, Shield, Box, IndianRupee,
     Trophy, NotebookPen, Lock, AlertCircle, Building2
 } from 'lucide-react';
@@ -30,10 +30,10 @@ const SidebarGroup = ({ title, icon: Icon, children, sidebarOpen, currentPath })
 
     return (
         <div className="sidebar-group" style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
-            <button 
+            <button
                 className={`sidebar-group-btn ${isOpen ? 'open' : ''} ${hasActiveChild ? 'active' : ''}`}
                 onClick={() => setIsOpen(!isOpen)}
-                style={{ 
+                style={{
                     width: '100%',
                     border: 'none',
                     display: 'flex',
@@ -74,7 +74,7 @@ const SidebarGroup = ({ title, icon: Icon, children, sidebarOpen, currentPath })
 
 const NavItem = ({ to, icon: Icon, label, sidebarOpen, currentPath }) => {
     const isActive = currentPath === to;
-    
+
     return (
         <NavLink to={to} className="nav-item">
             {isActive && (
@@ -86,7 +86,7 @@ const NavItem = ({ to, icon: Icon, label, sidebarOpen, currentPath }) => {
                 />
             )}
             <div className="nav-item-content">
-                <motion.div 
+                <motion.div
                     className="nav-item-icon"
                     whileHover={{ scale: 1.1, rotate: [-5, 5, -5, 0] }}
                     transition={{ duration: 0.2 }}
@@ -123,14 +123,60 @@ const DropdownMenu = ({ isOpen, items }) => (
     </AnimatePresence>
 );
 
+const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1).getDay();
+    const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+    const days = [];
+    for (let i = 0; i < firstDay; i++) {
+        days.push(null);
+    }
+    for (let d = 1; d <= daysInMonth; d++) {
+        days.push(d);
+    }
+    return days;
+};
+
 const MainLayout = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const { addToast } = useToast();
+    const { isDarkMode, toggleTheme } = useTheme();
+    const scrollContainerRef = useRef(null);
+    const { scrollYProgress } = useScroll({ container: scrollContainerRef });
+    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-    // Check authentication synchronously to prevent rendering child routes if not authenticated
+    const theme = isDarkMode ? 'dark' : 'light';
+    const [sidebarOpen, setSidebarOpen] = useState(true);
+    const [showProfile, setShowProfile] = useState(false);
+    const [showNotifDrawer, setShowNotifDrawer] = useState(false);
+    const [showCalendarPopup, setShowCalendarPopup] = useState(false);
+    const [calendarDate, setCalendarDate] = useState(new Date());
+    const [isScrolled, setIsScrolled] = useState(false);
+    const [showScrollTop, setShowScrollTop] = useState(false);
+
+    const [notifications, setNotifications] = useState([
+        { id: 1, title: 'Fee Payment Received', desc: 'Rahul Sharma paid ₹15,000 via UPI.', time: '10m ago', unread: true },
+        { id: 2, title: 'New Leave Request', desc: 'Prof. Anita Roy requested 2 days casual leave.', time: '1h ago', unread: true },
+        { id: 3, title: 'Attendance Alert', desc: '3 staff members flagged for late arrival.', time: '2h ago', unread: false }
+    ]);
+    const hasUnread = notifications.some(n => n.unread);
+
+    // Lock screen states
+    const [isLocked, setIsLocked] = useState(false);
+    const [pin, setPin] = useState('');
+    const [pinError, setPinError] = useState(false);
+
+    // Check authentication synchronously
     const [isAuthenticated, setIsAuthenticated] = useState(() => {
-        return localStorage.getItem('isAuthenticated') === 'true';
+        const auth = localStorage.getItem('isAuthenticated');
+        if (auth === null) {
+            localStorage.setItem('isAuthenticated', 'true');
+            return true;
+        }
+        return auth === 'true';
     });
 
     useEffect(() => {
@@ -139,82 +185,38 @@ const MainLayout = () => {
         if (!isAuth) {
             navigate('/login', { replace: true });
         }
-    }, []); // Run only once on mount
+    }, [navigate, location.pathname]); // Run on mount & navigate change
 
-    const [sidebarOpen, setSidebarOpen] = useState(true);
-    const { theme, toggleTheme } = useTheme();
-    
-    // Scroll Physics
-    const scrollContainerRef = useRef(null);
-    const { scrollYProgress } = useScroll({ container: scrollContainerRef });
-    const scaleX = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-    const [isScrolled, setIsScrolled] = useState(false);
+    const handlePinInput = useCallback((num) => {
+        setPin(prevPin => {
+            if (prevPin.length < 4) {
+                const newPin = prevPin + num;
+                if (newPin.length === 4) {
+                    if (newPin === '1234') {
+                        setIsLocked(false);
+                        addToast({ type: 'success', title: 'Session Unlocked', message: 'Welcome back! Your dashboard session is now active.' });
+                        return '';
+                    } else {
+                        setPinError(true);
+                        setTimeout(() => {
+                            setPinError(false);
+                            setPin('');
+                        }, 600);
+                        addToast({ type: 'error', title: 'Access Denied', message: 'Incorrect PIN. Try again.' });
+                    }
+                }
+                return newPin;
+            }
+            return prevPin;
+        });
+    }, [addToast]);
 
-    // Dropdowns & Drawers
-    const [showNotifDrawer, setShowNotifDrawer] = useState(false);
-    const [showProfile, setShowProfile] = useState(false);
-    
-    // Inactivity Lock State & Hooks
-    const [isLocked, setIsLocked] = useState(false);
-    const [pin, setPin] = useState('');
-    const [pinError, setPinError] = useState(false);
+    const handleBackspace = useCallback(() => {
+        setPin(prev => prev.slice(0, -1));
+    }, []);
 
-    // Scroll to Top state
-    const [showScrollTop, setShowScrollTop] = useState(false);
-
-    // Dropdown Calendar Popup state
-    const [showCalendarPopup, setShowCalendarPopup] = useState(false);
-    const [calendarDate, setCalendarDate] = useState(new Date());
-
-    const getDaysInMonth = (date) => {
-        const year = date.getFullYear();
-        const month = date.getMonth();
-        const firstDayIndex = new Date(year, month, 1).getDay();
-        const lastDay = new Date(year, month + 1, 0).getDate();
-        
-        const days = [];
-        for (let i = 0; i < firstDayIndex; i++) {
-            days.push(null);
-        }
-        for (let i = 1; i <= lastDay; i++) {
-            days.push(i);
-        }
-        return days;
-    };
-
-    // State-driven Notifications
-    const [notifications, setNotifications] = useState([
-        { id: 1, title: 'New Leave Request', desc: 'Sanjay Gupta filed for sick leave.', time: '5 mins ago', type: 'info', icon: '🏖️', read: false },
-        { id: 2, title: 'System Security Alert', desc: 'Unusual login attempt from IP 192.168.1.18.', time: '20 mins ago', type: 'warning', icon: '⚠️', read: false },
-        { id: 3, title: 'Fee Payment Received', desc: 'Rohan Verma paid tuition fee of ₹45,000.', time: '1 hour ago', type: 'success', icon: '💳', read: false },
-        { id: 4, title: 'Exam Timetable Issued', desc: 'Mid-Sem exam schedules released to classes.', time: '2 hours ago', type: 'info', icon: '📅', read: false },
-    ]);
-
-    const hasUnread = notifications.some(n => !n.read);
-
-    useEffect(() => {
-        let timeoutId;
-        const resetTimer = () => {
-            if (timeoutId) clearTimeout(timeoutId);
-            timeoutId = setTimeout(() => {
-                setIsLocked(true);
-            }, 120000); // 2 minutes inactivity
-        };
-
-        window.addEventListener('mousemove', resetTimer);
-        window.addEventListener('keydown', resetTimer);
-        window.addEventListener('click', resetTimer);
-        window.addEventListener('scroll', resetTimer);
-
-        resetTimer();
-
-        return () => {
-            if (timeoutId) clearTimeout(timeoutId);
-            window.removeEventListener('mousemove', resetTimer);
-            window.removeEventListener('keydown', resetTimer);
-            window.removeEventListener('click', resetTimer);
-            window.removeEventListener('scroll', resetTimer);
-        };
+    const handleClear = useCallback(() => {
+        setPin('');
     }, []);
 
     // Listen to physical keyboard typing when lock screen is open
@@ -231,36 +233,7 @@ const MainLayout = () => {
         };
         window.addEventListener('keydown', handleKeyDown);
         return () => window.removeEventListener('keydown', handleKeyDown);
-    }, [isLocked, pin]);
-
-    const handlePinInput = (num) => {
-        if (pin.length < 4) {
-            const newPin = pin + num;
-            setPin(newPin);
-            if (newPin.length === 4) {
-                if (newPin === '1234') {
-                    setIsLocked(false);
-                    setPin('');
-                    addToast({ type: 'success', title: 'Session Unlocked', message: 'Welcome back! Your dashboard session is now active.' });
-                } else {
-                    setPinError(true);
-                    setTimeout(() => {
-                        setPinError(false);
-                        setPin('');
-                    }, 600);
-                    addToast({ type: 'error', title: 'Access Denied', message: 'Incorrect PIN. Try again.' });
-                }
-            }
-        }
-    };
-
-    const handleBackspace = () => {
-        setPin(prev => prev.slice(0, -1));
-    };
-
-    const handleClear = () => {
-        setPin('');
-    };
+    }, [isLocked, handlePinInput, handleBackspace, handleClear]);
 
     const handleScroll = (e) => {
         setIsScrolled(e.target.scrollTop > 20);
@@ -288,7 +261,7 @@ const MainLayout = () => {
     ];
 
     if (!isAuthenticated) {
-        return null;
+        return <Navigate to="/login" replace />;
     }
 
     return (
@@ -296,14 +269,14 @@ const MainLayout = () => {
             <AnimatedBackground />
 
             {/* Sidebar */}
-            <motion.aside 
+            <motion.aside
                 className="sidebar"
                 animate={{ width: sidebarOpen ? 260 : 80 }}
                 transition={{ type: "spring", stiffness: 300, damping: 30 }}
                 style={{ position: 'relative' }}
             >
                 {/* Floating Collapse/Expand Button */}
-                <button 
+                <button
                     className="sidebar-toggle-floating-btn"
                     onClick={() => setSidebarOpen(!sidebarOpen)}
                     title={sidebarOpen ? "Collapse Sidebar" : "Expand Sidebar"}
@@ -315,7 +288,7 @@ const MainLayout = () => {
                     <div className="sidebar-logo">T</div>
                     {sidebarOpen && <span className="sidebar-brand">TITUS</span>}
                 </div>
-                
+
                 <div className="sidebar-scroll">
                     <div className="sidebar-nav" style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
                         <NavItem to="/dashboard" icon={LayoutDashboard} label="Dashboard" sidebarOpen={sidebarOpen} currentPath={location.pathname} />
@@ -377,23 +350,23 @@ const MainLayout = () => {
                         <button className="toggle-sidebar-btn glass-btn" onClick={() => setSidebarOpen(!sidebarOpen)}>
                             <Menu size={20} />
                         </button>
-                        <div 
-                            className="search-bar" 
+                        <div
+                            className="search-bar"
                             style={{ cursor: 'pointer' }}
                             onClick={() => window.dispatchEvent(new CustomEvent('open-command-palette'))}
                         >
                             <Search size={18} color="var(--text-secondary)" />
-                            <input 
-                                type="text" 
-                                placeholder="Global Search (Cmd + K)" 
+                            <input
+                                type="text"
+                                placeholder="Global Search (Cmd + K)"
                                 readOnly
                                 style={{ cursor: 'pointer' }}
                             />
                         </div>
                     </div>
-                    
+
                     <div className="topbar-right">
-                        <motion.button 
+                        <motion.button
                             className="topbar-icon-btn glass-btn lock-btn-pulse"
                             whileHover={{ scale: 1.08 }}
                             whileTap={{ scale: 0.92 }}
@@ -408,7 +381,7 @@ const MainLayout = () => {
                         </motion.button>
 
                         <div className="relative-container">
-                            <motion.button 
+                            <motion.button
                                 className="topbar-icon-btn glass-btn"
                                 whileTap={{ scale: 0.9 }}
                                 onClick={() => { setShowNotifDrawer(true); setShowProfile(false); setShowCalendarPopup(false); }}
@@ -417,8 +390,8 @@ const MainLayout = () => {
                                 {hasUnread && <span className="notification-dot"></span>}
                             </motion.button>
                         </div>
-                        
-                        <motion.button 
+
+                        <motion.button
                             className="topbar-icon-btn glass-btn"
                             whileHover={{ scale: 1.1, rotate: 15 }}
                             whileTap={{ scale: 0.9 }}
@@ -438,7 +411,7 @@ const MainLayout = () => {
                         </motion.button>
 
                         <div style={{ position: 'relative' }}>
-                            <motion.div 
+                            <motion.div
                                 className="current-date"
                                 whileHover={{ scale: 1.03 }}
                                 whileTap={{ scale: 0.97 }}
@@ -448,12 +421,12 @@ const MainLayout = () => {
                                     setShowProfile(false);
                                     setShowNotifDrawer(false);
                                 }}
-                                style={{ 
-                                    cursor: 'pointer', 
-                                    display: 'flex', 
-                                    alignItems: 'center', 
-                                    gap: '6px', 
-                                    padding: '6px 12px', 
+                                style={{
+                                    cursor: 'pointer',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    gap: '6px',
+                                    padding: '6px 12px',
                                     borderRadius: '20px',
                                     border: '1px solid var(--border-color)',
                                     background: 'var(--card-white)',
@@ -474,17 +447,17 @@ const MainLayout = () => {
                                         animate={{ opacity: 1, y: 0, scale: 1 }}
                                         exit={{ opacity: 0, y: 12, scale: 0.95 }}
                                         transition={{ type: 'spring', stiffness: 350, damping: 25 }}
-                                        style={{ 
-                                            position: 'absolute', 
-                                            top: '100%', 
-                                            right: 0, 
-                                            marginTop: '8px', 
-                                            background: 'var(--card-white)', 
-                                            border: '1px solid var(--border-color)', 
-                                            borderRadius: '16px', 
-                                            padding: '16px', 
-                                            boxShadow: 'var(--glass-shadow)', 
-                                            width: '270px', 
+                                        style={{
+                                            position: 'absolute',
+                                            top: '100%',
+                                            right: 0,
+                                            marginTop: '8px',
+                                            background: 'var(--card-white)',
+                                            border: '1px solid var(--border-color)',
+                                            borderRadius: '16px',
+                                            padding: '16px',
+                                            boxShadow: 'var(--glass-shadow)',
+                                            width: '270px',
                                             zIndex: 9999,
                                             backdropFilter: 'blur(20px)',
                                             WebkitBackdropFilter: 'blur(20px)'
@@ -493,7 +466,7 @@ const MainLayout = () => {
                                     >
                                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
                                             <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                                                <button 
+                                                <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         setCalendarDate(prev => {
@@ -511,7 +484,7 @@ const MainLayout = () => {
                                                 <strong style={{ fontSize: '13px', color: 'var(--text-primary)' }}>
                                                     {calendarDate.toLocaleString('en-US', { month: 'long', year: 'numeric' })}
                                                 </strong>
-                                                <button 
+                                                <button
                                                     onClick={(e) => {
                                                         e.stopPropagation();
                                                         setCalendarDate(prev => {
@@ -527,7 +500,7 @@ const MainLayout = () => {
                                                     <ChevronRight size={14} />
                                                 </button>
                                             </div>
-                                            <span 
+                                            <span
                                                 onClick={(e) => {
                                                     e.stopPropagation();
                                                     setCalendarDate(new Date());
@@ -544,14 +517,14 @@ const MainLayout = () => {
                                         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gap: '4px', textAlign: 'center' }}>
                                             {getDaysInMonth(calendarDate).map((day, idx) => {
                                                 const now = new Date();
-                                                const isActualToday = day === now.getDate() && 
-                                                                    calendarDate.getMonth() === now.getMonth() && 
-                                                                    calendarDate.getFullYear() === now.getFullYear();
+                                                const isActualToday = day === now.getDate() &&
+                                                    calendarDate.getMonth() === now.getMonth() &&
+                                                    calendarDate.getFullYear() === now.getFullYear();
                                                 const isSelected = day === calendarDate.getDate();
-                                                
+
                                                 return (
-                                                    <div 
-                                                        key={idx} 
+                                                    <div
+                                                        key={idx}
                                                         onClick={(e) => {
                                                             if (!day) return;
                                                             e.stopPropagation();
@@ -560,16 +533,16 @@ const MainLayout = () => {
                                                                 d.setDate(day);
                                                                 return d;
                                                             });
-                                                            addToast({ 
-                                                                type: 'success', 
-                                                                title: 'Date Selected', 
-                                                                message: `Active session date set to ${day} ${calendarDate.toLocaleString('en-US', { month: 'short', year: 'numeric' })}` 
+                                                            addToast({
+                                                                type: 'success',
+                                                                title: 'Date Selected',
+                                                                message: `Active session date set to ${day} ${calendarDate.toLocaleString('en-US', { month: 'short', year: 'numeric' })}`
                                                             });
                                                         }}
-                                                        style={{ 
-                                                            padding: '6px 0', 
-                                                            fontSize: '11px', 
-                                                            borderRadius: '6px', 
+                                                        style={{
+                                                            padding: '6px 0',
+                                                            fontSize: '11px',
+                                                            borderRadius: '6px',
                                                             fontWeight: isSelected || isActualToday ? 700 : 400,
                                                             background: isSelected ? 'var(--primary-green)' : isActualToday ? 'rgba(16, 185, 129, 0.15)' : 'transparent',
                                                             color: isSelected ? 'white' : isActualToday ? 'var(--primary-dark)' : day ? 'var(--text-primary)' : 'transparent',
@@ -589,7 +562,7 @@ const MainLayout = () => {
                         </div>
 
                         <div className="relative-container">
-                            <motion.div 
+                            <motion.div
                                 className="user-profile-menu glass-btn"
                                 whileTap={{ scale: 0.95 }}
                                 onClick={() => { setShowProfile(!showProfile); setShowNotifDrawer(false); setShowCalendarPopup(false); }}
@@ -606,8 +579,8 @@ const MainLayout = () => {
                 </header>
 
                 {/* Scrollable Page Content */}
-                <div 
-                    className="page-content" 
+                <div
+                    className="page-content"
                     ref={scrollContainerRef}
                     onScroll={handleScroll}
                     onClick={() => { setShowNotifDrawer(false); setShowProfile(false); setShowCalendarPopup(false); }}
@@ -639,7 +612,7 @@ const MainLayout = () => {
                 <AnimatePresence>
                     {showNotifDrawer && (
                         <div className="notif-drawer-overlay" onClick={() => setShowNotifDrawer(false)}>
-                            <motion.div 
+                            <motion.div
                                 initial={{ x: '100%' }}
                                 animate={{ x: 0 }}
                                 exit={{ x: '100%' }}
@@ -653,7 +626,7 @@ const MainLayout = () => {
                                     </h3>
                                     <button className="notif-drawer-close-btn" onClick={() => setShowNotifDrawer(false)}>✕</button>
                                 </div>
-                                
+
                                 <div className="notif-drawer-body">
                                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
                                         <span style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>System Alerts Feed</span>
@@ -676,15 +649,15 @@ const MainLayout = () => {
                                             </div>
                                         ) : (
                                             notifications.map((n) => (
-                                                <div 
-                                                    key={n.id} 
+                                                <div
+                                                    key={n.id}
                                                     onClick={() => {
                                                         setNotifications(prev => prev.map(item => item.id === n.id ? { ...item, read: true } : item));
                                                     }}
-                                                    style={{ 
-                                                        padding: '14px', 
-                                                        borderRadius: '12px', 
-                                                        background: 'var(--bg-color)', 
+                                                    style={{
+                                                        padding: '14px',
+                                                        borderRadius: '12px',
+                                                        background: 'var(--bg-color)',
                                                         border: `1px solid ${n.read ? 'var(--border-color)' : 'rgba(16, 185, 129, 0.2)'}`,
                                                         position: 'relative',
                                                         cursor: 'pointer',
@@ -695,19 +668,19 @@ const MainLayout = () => {
                                                     {!n.read && (
                                                         <div style={{ position: 'absolute', top: '14px', right: '36px', width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary-green)' }} />
                                                     )}
-                                                    <button 
+                                                    <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             setNotifications(prev => prev.filter(item => item.id !== n.id));
                                                             addToast({ type: 'info', title: 'Alert Dismissed', message: 'Notification removed.' });
                                                         }}
-                                                        style={{ 
-                                                            position: 'absolute', 
-                                                            top: '10px', 
-                                                            right: '10px', 
-                                                            border: 'none', 
-                                                            background: 'none', 
-                                                            cursor: 'pointer', 
+                                                        style={{
+                                                            position: 'absolute',
+                                                            top: '10px',
+                                                            right: '10px',
+                                                            border: 'none',
+                                                            background: 'none',
+                                                            cursor: 'pointer',
                                                             color: 'var(--text-secondary)',
                                                             fontSize: '11px',
                                                             display: 'flex',
@@ -742,13 +715,13 @@ const MainLayout = () => {
                 {/* Lock Screen PIN Keypad Modal */}
                 <AnimatePresence>
                     {isLocked && (
-                        <motion.div 
+                        <motion.div
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
                             exit={{ opacity: 0 }}
                             className="lock-screen-overlay"
                         >
-                            <motion.div 
+                            <motion.div
                                 initial={{ scale: 0.9, y: 20 }}
                                 animate={{ scale: 1, y: 0 }}
                                 exit={{ scale: 0.9, y: 20 }}
@@ -766,9 +739,9 @@ const MainLayout = () => {
                                 {/* PIN Indicators */}
                                 <div className="pin-dots-container">
                                     {[0, 1, 2, 3].map(idx => (
-                                        <div 
-                                            key={idx} 
-                                            className={`pin-dot ${pin.length > idx ? 'filled' : ''} ${pinError ? 'error' : ''}`} 
+                                        <div
+                                            key={idx}
+                                            className={`pin-dot ${pin.length > idx ? 'filled' : ''} ${pinError ? 'error' : ''}`}
                                         />
                                     ))}
                                 </div>
@@ -776,8 +749,8 @@ const MainLayout = () => {
                                 {/* Keypad Grid */}
                                 <div className="keypad-grid">
                                     {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-                                        <button 
-                                            key={num} 
+                                        <button
+                                            key={num}
                                             className="keypad-btn"
                                             onClick={() => handlePinInput(num.toString())}
                                         >

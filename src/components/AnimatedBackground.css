@@ -52,6 +52,10 @@
     animation-delay: -10s;
 }
 
+.animated-background.ambient-subtle .blob {
+    opacity: 0.06 !important;
+}
+
 /* Dark Mode Colors */
 [data-theme='dark'] .blob-1 {
     background: #047857; /* Deep Emerald */
@@ -62,7 +66,20 @@
 }
 
 [data-theme='dark'] .blob-3 {
-    background: #4338ca; /* Indigo */
+    background: #1e1b4b; /* Deep Violet */
+}
+
+.blob-4 {
+    width: 450px;
+    height: 450px;
+    background: #e0e7ff; /* Soft Lavender */
+    bottom: 20%;
+    left: 60%;
+    animation-delay: -15s;
+}
+
+[data-theme='dark'] .blob-4 {
+    background: #312e81; /* Indigo Slate */
 }
 
 @keyframes morphLiquid {

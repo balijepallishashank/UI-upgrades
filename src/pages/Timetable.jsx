@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
     CalendarDays, Users, BookOpen, AlertTriangle, Save, Copy, 
-    Printer, FileDown, Plus, Trash2, ChevronDown, CheckCircle2
+    Printer, FileDown, Plus, CheckCircle2
 } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import KPICard from '../components/KPICard';
@@ -30,7 +30,7 @@ const Timetable = () => {
     const [showDrawer, setShowDrawer] = useState(false);
 
     // Build initial timetable state from mockData
-    const buildEmpty = () => DAYS.map(day => Array.from({ length: numPeriods }, () => ({ subject: '', teacher: '', alt: '' })));
+    const buildEmpty = () => DAYS.map(() => Array.from({ length: numPeriods }, () => ({ subject: '', teacher: '', alt: '' })));
 
     const initTimetable = () => {
         const data = mockTimetableData[selectedClass];
@@ -207,7 +207,7 @@ const Timetable = () => {
                             <tr>
                                 <th style={{ width: '100px', textAlign: 'left', padding: '10px 8px', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.06em', background: 'linear-gradient(135deg, var(--primary-green), var(--primary-dark))', color: '#fff', borderRadius: '10px 0 0 0' }}>Day</th>
                                 {Array.from({ length: numPeriods }, (_, pi) => (
-                                    <th key={pi} style={{ padding: '8px 6px', textAlign: 'center', background: '#f7f9ff' }}>
+                                    <th key={pi} style={{ padding: '8px 6px', textAlign: 'center', background: 'var(--bg-color)' }}>
                                         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
                                             <span style={{ display: 'inline-flex', alignItems: 'center', gap: '4px', padding: '4px 10px', borderRadius: '6px', background: 'linear-gradient(135deg, var(--primary-green), var(--primary-dark))', color: '#fff', fontSize: '11px', fontWeight: 700, fontFamily: 'monospace' }}>
                                                 P{pi + 1}
@@ -276,7 +276,7 @@ const Timetable = () => {
                                                                 👤 {cell.teacher || 'No Teacher'}
                                                             </span>
                                                             {cell.alt && (
-                                                                <span style={{ fontSize: '9px', background: '#faf5ff', color: '#6d28d9', padding: '2px 6px', borderRadius: '4px', alignSelf: 'flex-start', fontWeight: 700, border: '1px solid #e9d5ff' }}>
+                                                                <span style={{ fontSize: '9px', background: 'var(--primary-light)', color: 'var(--primary-dark)', padding: '2px 6px', borderRadius: '4px', alignSelf: 'flex-start', fontWeight: 700, border: '1px solid var(--border-color)' }}>
                                                                     Alt: {cell.alt}
                                                                 </span>
                                                             )}

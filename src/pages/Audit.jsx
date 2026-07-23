@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Shield, Users, Activity, Clock, Server, Monitor } from 'lucide-react';
+import { Shield, Users, Activity, Clock, Server } from 'lucide-react';
 import PageTransition from '../components/PageTransition';
 import SegmentedControl from '../components/SegmentedControl';
 import AnimatedNumber from '../components/AnimatedNumber';
